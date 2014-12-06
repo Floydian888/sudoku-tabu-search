@@ -5,83 +5,68 @@ import java.util.Random;
 public class BoardGenerator {
 
 	private SudokuCell [][] board;
+	private int size;
 
 	public boolean isCorrect(int size){
 		return Helpers.isCorrect(board);
 	}
-	
+
 	private boolean isSafe(int num, int row, int col) {
 		return Helpers.isSafe(board, num, row, col);
 	}
-	
-	private void clearCell(int cell, int size) {
-		int col = cell % size;
-		int row = cell / size;
-		board[row][col].clear();
-	}
-	
-	private boolean generateCorrectBoard(int size, int currentCell, ArrayList<Integer> availableNumbers) {
-		if (currentCell == size*size )
-			return true;
-		
-		int col = currentCell % size;
-		int row = currentCell / size;
 
-		if (availableNumbers.size() > 0) {
-			Collections.shuffle(availableNumbers);
-			int num = availableNumbers.get(0);
-			if (isSafe(num, row, col)) {
-				board[row][col].set(num);
-				availableNumbers.clear();
-				for (int i = 1; i <= size; i++)
-					availableNumbers.add(i);
-				if (generateCorrectBoard(size, currentCell + 1, availableNumbers) )
-					return true;
-			} 
-			else{
-				availableNumbers.remove(new Integer(num));
-				if(generateCorrectBoard(size, currentCell, availableNumbers))
-					return true;
-			}
-		}
-		else {
-			for (int i = 1; i <= size; i++)
-				availableNumbers.add(i);
-			
-			clearCell(currentCell - 1, size);
-			clearCell(currentCell - 2, size);
-			clearCell(currentCell - 3, size);
-			clearCell(currentCell - 4, size);
-			clearCell(currentCell - 5, size);
-			clearCell(currentCell - 6, size);
-			clearCell(currentCell - 7, size);
-			clearCell(currentCell - 8, size);
-			clearCell(currentCell - 9, size);
-			if(generateCorrectBoard(size, currentCell - 9, availableNumbers))
-				return true;
-		}
-		return false;
+	private int variantsPerCell() {
+        return size;
+    }
+
+	private int getRandomIndex() {
+        return (int) (Math.random() * 10) % size + 1;
+    }
+
+	private Coordinates nextCell(int row, int col) {
+		return Helpers.nextCell(row, col, size);
 	}
-	
-	public void generateCorrectBoard(int size){
-		
+
+	private void generateCorrectBoard(final int row, final int col) {
+		if (!board[size - 1][size - 1].isFilled() ) {
+			while (board[row][col].numberOfTried() < variantsPerCell()) {
+				int candidate = 0;
+				do {
+					candidate = getRandomIndex();
+				} while (board[row][col].isTried(candidate));
+
+				if (isSafe(candidate, row, col)) {
+					board[row][col].set(candidate);
+					Coordinates nextCell = nextCell(row, col);
+					if (nextCell.x < size && nextCell.y < size)
+						generateCorrectBoard(nextCell.y, nextCell.x);
+				}
+				else
+					board[row][col].tryNumber(candidate);
+			}
+			if (!board[size - 1][size - 1].isFilled())
+				board[row][col].reset();
+		}
+	}
+
+	public void generateCorrectBoard(int s){
+		size = s;
+
 		board = new SudokuCell[size][size];
 		for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
             	board[i][j] = new SudokuCell();
             }
         }
-		ArrayList<Integer> availableNumbers = new ArrayList<Integer>();
-		for (int i = 1; i <= 9; i++)
-			availableNumbers.add(i);
-		generateCorrectBoard(size, 0, availableNumbers);	
+
+		generateCorrectBoard(0, 0);
 
 	}
-	
+
 	public void removeNumbers(int leftNumbersNmb){
 		
 	}
-	
+
 	public int [][] getCurrentBoard(){
 		int [][] intBoard = new int[board.length][board.length];
 		for (int i = 0; i < board.length; i++) {

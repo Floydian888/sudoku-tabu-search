@@ -88,4 +88,23 @@ public class Helpers {
 		
 		return false;
 	}
+
+	public static Coordinates nextCell(final int row, final int col, final int size) {
+        int r = row, c = col;
+        if (c < size - 1) {
+            c++;
+        } else {
+            c = 0;
+            ++r;
+        }
+        return new Coordinates(c, r);
+    }
+
+	public static void printBoard(int [][] board) {
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board.length; x++)
+				System.out.print(board[y][x] + " ");
+			System.out.print("\n");
+		}
+	}
 }
