@@ -10,7 +10,7 @@ public class BoardGeneratorTest {
 		BoardGenerator bg = new BoardGenerator();
 		
 		bg.generateCorrectBoard(9);
-		int [][] board1	 = {{0,0,0,0,0,0,0,0,0},
+		/*int [][] board1	 = {{0,0,0,0,0,0,0,0,0},
 						  {0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0},
@@ -20,8 +20,14 @@ public class BoardGeneratorTest {
 		{0,0,0,0,0,0,0,0,0},
 		{0,0,0,0,0,0,0,0,0}};
 		
-		assertFalse(Helpers.isCorrect(board1));
+		assertFalse(Helpers.isCorrect(board1, 9));*/
 		
+	}
+	@Test
+	public void generateCorrectBoardTest() {
+		BoardGenerator bg = new BoardGenerator();
+		bg.generateCorrectBoard(9);
+		assertTrue(bg.isCorrect(9));
 	}
 
 }
