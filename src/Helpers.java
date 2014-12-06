@@ -14,6 +14,7 @@ public class Helpers {
 		
 		return true;
 	}
+	
 	public static boolean isSafe(SudokuCell [][] board, int num, int row, int col, int size) {
 		return (!usedInCol(board, num, col, size) && !usedInRow(board, num, row, size) && !usedInBox(board, num, row - row%3, col - col%3, size));
 	}

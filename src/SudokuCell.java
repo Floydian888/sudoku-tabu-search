@@ -1,15 +1,18 @@
 import java.util.HashSet;
 
-
 public class SudokuCell {
 	private int value;
     private boolean filled;
     private HashSet<Integer> tried;
 
     public SudokuCell() {
+        this(0);
+    }
+    
+    public SudokuCell(int value) {
         filled = false;
         tried = new HashSet<Integer>();
-        value = 0;
+        this.value = value;
     }
 
     public boolean isFilled() {

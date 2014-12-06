@@ -1,5 +1,6 @@
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BoardGenerator {
 
@@ -61,6 +62,7 @@ public class BoardGenerator {
 		}
 		return false;
 	}
+	
 	public void generateCorrectBoard(int size){
 		
 		board = new SudokuCell[size][size];
