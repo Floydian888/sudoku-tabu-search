@@ -7,11 +7,11 @@ public class BoardGenerator {
 	private SudokuCell [][] board;
 
 	public boolean isCorrect(int size){
-		return Helpers.isCorrect(board, size);
+		return Helpers.isCorrect(board);
 	}
 	
-	private boolean isSafe(int num, int row, int col, int size) {
-		return Helpers.isSafe(board, num, row, col, size);
+	private boolean isSafe(int num, int row, int col) {
+		return Helpers.isSafe(board, num, row, col);
 	}
 	
 	private void clearCell(int cell, int size) {
@@ -30,7 +30,7 @@ public class BoardGenerator {
 		if (availableNumbers.size() > 0) {
 			Collections.shuffle(availableNumbers);
 			int num = availableNumbers.get(0);
-			if (isSafe(num, row, col, size)) {
+			if (isSafe(num, row, col)) {
 				board[row][col].set(num);
 				availableNumbers.clear();
 				for (int i = 1; i <= size; i++)
@@ -82,8 +82,13 @@ public class BoardGenerator {
 		
 	}
 	
-	public SudokuCell [][] getCurrentBoard(){
-		return board;
+	public int [][] getCurrentBoard(){
+		int [][] intBoard = new int[board.length][board.length];
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
+				intBoard[i][j] = board[i][j].get();
+			}
+		}
+		return intBoard;
 	}
-	
 }
