@@ -7,11 +7,11 @@ public class BoardGenerator {
 	private SudokuCell [][] board;
 	private int size;
 
-	public boolean isCorrect(int size){
+	public boolean isCorrect(final int size){
 		return Helpers.isCorrect(board);
 	}
 
-	private boolean isSafe(int num, int row, int col) {
+	private boolean isSafe(final int num, final int row, final int col) {
 		return Helpers.isSafe(board, num, row, col);
 	}
 
@@ -23,7 +23,7 @@ public class BoardGenerator {
         return (int) (Math.random() * 10) % size + 1;
     }
 
-	private Coordinates nextCell(int row, int col) {
+	private Coordinates nextCell(final int row, final int col) {
 		return Helpers.nextCell(row, col, size);
 	}
 
@@ -49,7 +49,7 @@ public class BoardGenerator {
 		}
 	}
 
-	public void generateCorrectBoard(int s){
+	public void generateCorrectBoard(final int s){
 		size = s;
 
 		board = new SudokuCell[size][size];
@@ -63,7 +63,7 @@ public class BoardGenerator {
 
 	}
 
-	public void removeNumbers(int leftNumbersNmb){
+	public void removeNumbers(final int leftNumbersNmb){
 		
 	}
 
