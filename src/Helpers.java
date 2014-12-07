@@ -128,6 +128,13 @@ public class Helpers {
         return new Coordinates(c, r);
     }
 
+	public static Coordinates currentCell(final int cell, final int size) {
+        int col = cell % size;
+        int row = cell / size;
+
+        return new Coordinates(col, row);
+    }
+
 	public static void printBoard(int [][] board) {
 		for (int y = 0; y < board.length; y++) {
 			for (int x = 0; x < board.length; x++)

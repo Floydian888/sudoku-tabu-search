@@ -1,6 +1,5 @@
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class BoardGenerator {
 
@@ -64,7 +63,23 @@ public class BoardGenerator {
 	}
 
 	public void removeNumbers(final int leftNumbersNmb){
-		
+		ArrayList<Integer> cellsToRemove = new ArrayList<Integer>();
+		for (int i = 0; i < size * size; i++)
+			cellsToRemove.add(i);
+
+		for (int i = 0; i < leftNumbersNmb; i++) {
+			Collections.shuffle(cellsToRemove);
+			cellsToRemove.remove(0);
+		}
+
+		for (int i = 0; i < cellsToRemove.size(); i++) {
+			Coordinates currentCell = currentCell(cellsToRemove.get(i));
+			board[currentCell.y][currentCell.x].clear();
+		}
+	}
+
+	private Coordinates currentCell(final int currectCell) {
+		return Helpers.currentCell(currectCell, size);
 	}
 
 	public int [][] getCurrentBoard(){
