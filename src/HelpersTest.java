@@ -34,4 +34,12 @@ public class HelpersTest {
 		assertTrue(Helpers.isCorrect(board2));
 		
 	}
+	
+	
+	@Test
+	public void getNumbersTest() {
+		Integer [] expected = {1,2,3};
+		Integer [] actual = Helpers.getNumbers(1,3);
+		assertArrayEquals(expected, actual);
+	}
 }

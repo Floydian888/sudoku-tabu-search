@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Test;
 
 public class SudokuEngineTest {
@@ -44,6 +46,30 @@ public class SudokuEngineTest {
 			 {1,1,1,1,1,1,1,1,1}};
 		SudokuEngine e3 = new SudokuEngine(b3);
 		assertEquals(2*8*9, e3.getCurrentConflictsNumber());
+	}
+	
+	@Test
+	public void fillBoardTest() {
+		int [][] inputBoard =
+			{{1,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,3},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,2}};
+		SudokuEngine engine = new SudokuEngine(inputBoard);
+		
+		engine.fillBoard();
+		int [][] filledBoard = engine.getCurrentState();
+		
+		assertTrue(Helpers.areCorrectAllBoxes(Helpers.convertToSudokuCells(filledBoard)));
+		
+		assertEquals(1, filledBoard[0][0]);
+		assertEquals(3, filledBoard[1][8]);
+		assertEquals(2, filledBoard[8][8]);
 	}
 }
 

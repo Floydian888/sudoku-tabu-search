@@ -1,8 +1,26 @@
 import java.util.ArrayList;
 
-
 public class Helpers {
 
+	public static Integer [] getNumbers(int start, int end){
+		Integer [] numbers = new Integer[end - start + 1];
+		for (int i = 0, number = start; number <= end; number++, i++) {
+			numbers[i] = number;
+		}
+		return numbers;
+	}
+	
+	public static SudokuCell [][] convertToSudokuCells(int [][] board){
+		int length = board.length;
+		SudokuCell [][] sudokuCells = new SudokuCell[length][length];
+		for (int i = 0; i < length; i++) {
+			for (int j = 0; j < length; j++) {
+				sudokuCells[i][j] = new SudokuCell(board[i][j]);
+			}
+		}
+		return sudokuCells;
+	}
+	
 	public static boolean isCorrect(SudokuCell [][] board){
 		for (int i = 0; i < board.length; i++)
 			if (!isCorrectCol(board, i) || !isCorrectRow(board, i))
@@ -47,6 +65,16 @@ public class Helpers {
 		
 		return false;
 			
+	}
+	
+	public static boolean areCorrectAllBoxes(SudokuCell [][] board){
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if(!isCorrectBox(board, i*3, j*3))
+					return false;
+			}
+		}
+		return true;
 	}
 	
 	private static boolean isCorrectBox(SudokuCell [][] board, int boxStartRow, int boxStartCol) {
