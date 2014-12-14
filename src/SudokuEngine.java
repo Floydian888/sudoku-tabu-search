@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.commons.collections4.queue.*;
 
 public class SudokuEngine {
 
@@ -17,12 +17,12 @@ public class SudokuEngine {
 		return (int) Math.sqrt(size());
 	}
 	
-	private Queue<Tuple<Coordinates, Coordinates>> shortTermTabuList = new LinkedList<Tuple<Coordinates, Coordinates>>();
-	private Queue<Tuple<Coordinates, Coordinates>> longTermTabuList = new LinkedList<Tuple<Coordinates, Coordinates>>();
+	private Queue<Tuple<Coordinates, Coordinates>> shortTermTabuList;
 	
 	private Set<Coordinates> blockedPositions = new HashSet<Coordinates>();
 	
-	public SudokuEngine(int [][] initialBoard){
+	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize){
+		shortTermTabuList = new CircularFifoQueue<Tuple<Coordinates, Coordinates>>(shortTermTabuListSize);
 		currentState = new SudokuBoard(initialBoard);
 		for (int i = 0; i < size(); i++) {
 			for (int j = 0; j < size(); j++) {

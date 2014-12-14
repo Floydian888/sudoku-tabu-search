@@ -18,7 +18,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e1 = new SudokuEngine(b1);
+		SudokuEngine e1 = new SudokuEngine(b1,1);
 		assertEquals(0, e1.getCurrentConflictsNumber());
 		
 		int [][] b2 =
@@ -31,7 +31,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e2 = new SudokuEngine(b2);
+		SudokuEngine e2 = new SudokuEngine(b2,1);
 		assertEquals(2, e2.getCurrentConflictsNumber());
 		
 		int [][] b3 =
@@ -44,7 +44,7 @@ public class SudokuEngineTest {
 			 {1,1,1,1,1,1,1,1,1},
 			 {1,1,1,1,1,1,1,1,1},
 			 {1,1,1,1,1,1,1,1,1}};
-		SudokuEngine e3 = new SudokuEngine(b3);
+		SudokuEngine e3 = new SudokuEngine(b3,1);
 		assertEquals(2*8*9, e3.getCurrentConflictsNumber());
 	}
 	
@@ -60,7 +60,7 @@ public class SudokuEngineTest {
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,2}};
-		SudokuEngine engine = new SudokuEngine(inputBoard);
+		SudokuEngine engine = new SudokuEngine(inputBoard,1);
 		
 		engine.fillBoard();
 		int [][] filledBoard = engine.getCurrentState();

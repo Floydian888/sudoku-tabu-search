@@ -35,7 +35,6 @@ public class HelpersTest {
 		
 	}
 	
-	
 	@Test
 	public void getNumbersTest() {
 		Integer [] expected = {1,2,3};
