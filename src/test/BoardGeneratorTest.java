@@ -1,4 +1,6 @@
+package test;
 import static org.junit.Assert.*;
+import main.BoardGenerator;
 
 import org.junit.Test;
 

@@ -1,3 +1,4 @@
+package main;
 import java.util.HashSet;
 
 public class SudokuCell {
@@ -5,11 +6,11 @@ public class SudokuCell {
     private boolean filled;
     private HashSet<Integer> tried;
 
-    public SudokuCell() {
+    public SudokuCell(){
         this(0);
     }
     
-    public SudokuCell(int value) {
+    public SudokuCell(int value){
         filled = false;
         tried = new HashSet<Integer>();
         this.value = value;
@@ -23,7 +24,7 @@ public class SudokuCell {
         return value;
     }
 
-    public void set(final int number) {
+    public void set(final int number){  	
         filled = true;
         value = number;
         tried.add(number);
@@ -47,11 +48,11 @@ public class SudokuCell {
         filled = false;
     }
 
-    public boolean isTried(final int number) {
+    public boolean isTried(final int number){    	
         return tried.contains(number);
     }
 
-    public void tryNumber(final int number) {
+    public void tryNumber(final int number){   	
         tried.add(number);
     }
 

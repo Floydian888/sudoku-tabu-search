@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 
 public class Helpers {
@@ -141,5 +142,29 @@ public class Helpers {
 				System.out.print(board[y][x] + " ");
 			System.out.print("\n");
 		}
+	}
+	
+	public static boolean hasProperSize(int [][] sudokuBoard){
+		if (sudokuBoard.length != 9)
+			return false;
+		for (int i = 0; i < sudokuBoard.length; i++) {
+			if(sudokuBoard[i].length != 9)
+				return false;
+		}
+		return true;
+	}
+	
+	public static boolean hasProperNumbers(int [][] sudokuBoard){
+		for (int i = 0; i < sudokuBoard.length; i++) {
+			for (int j = 0; j < sudokuBoard.length; j++) {
+				if(sudokuBoard[i][j] < 0 || sudokuBoard[i][j] > 9)
+					return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean isSudokuIndexGood(int index){
+		return index <= 8 && index >= 0;
 	}
 }

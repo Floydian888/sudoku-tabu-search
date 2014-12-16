@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -7,21 +8,30 @@ import java.util.Set;
 
 import org.apache.commons.collections4.queue.*;
 
+import exception.WrongSudokuNumberException;
+import exception.WrongSudokuSizeException;
+
 public class SudokuEngine {
 
 	private SudokuBoard currentState;
 	private int size(){
-		return currentState.size();
+		return 9;
 	}
 	private int boxSize(){
-		return (int) Math.sqrt(size());
+		return 3;
 	}
 	
 	private Queue<Tuple<Coordinates, Coordinates>> shortTermTabuList;
 	
 	private Set<Coordinates> blockedPositions = new HashSet<Coordinates>();
 	
-	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize){
+	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize) throws WrongSudokuSizeException, WrongSudokuNumberException{
+		
+		if (!Helpers.hasProperSize(initialBoard))
+			throw new WrongSudokuSizeException("In SudokuEngine constructor");
+		if (!Helpers.hasProperNumbers(initialBoard))
+			throw new WrongSudokuNumberException("In SudokuEngine constructor");
+		
 		shortTermTabuList = new CircularFifoQueue<Tuple<Coordinates, Coordinates>>(shortTermTabuListSize);
 		currentState = new SudokuBoard(initialBoard);
 		for (int i = 0; i < size(); i++) {

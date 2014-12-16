@@ -1,4 +1,7 @@
+package test;
 import static org.junit.Assert.*;
+import main.Helpers;
+import main.SudokuCell;
 
 import org.junit.Test;
 
