@@ -22,6 +22,7 @@ public class SudokuEngine {
 
 	private SudokuBoard currentState;
 	private SudokuBoard currentBest;
+	boolean isUsedAspirationCriterion;
 	private int size(){
 		return 9;
 	}
@@ -152,11 +153,13 @@ public class SudokuEngine {
 			for (int i = 0; i < neighborhood.size(); i++) {
 				Movement movement = neighborhood.get(i).x;
 				
-				if (!shortTermTabuList.contains(movement)) {
+				if (!shortTermTabuList.contains(movement) ||
+						(isUsedAspirationCriterion &&
+								neighborhood.get(i).y < Helpers.getCurrentConflictsNumber(currentBest.getBoard()))) {
 					currentState.swapNumbersByCoordinates(movement.from, movement.to);
 					shortTermTabuList.add(movement);
 					break;
-				}
+				}				
 			}
 
 			if (getCurrentConflictsNumber() < Helpers.getCurrentConflictsNumber(currentBest.getBoard())) {

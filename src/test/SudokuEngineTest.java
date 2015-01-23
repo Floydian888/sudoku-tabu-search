@@ -219,7 +219,21 @@ public class SudokuEngineTest {
 			 {4,0,5,7,9,8,1,0,2}};
 		SudokuEngine engine2 = new SudokuEngine(b2,5);
 		engine2.runTabuSearch();
-		assertEquals(0, engine2.getCurrentConflictsNumber());		
+		assertEquals(0, engine2.getCurrentConflictsNumber());	
+		
+		int [][] b3 =
+			{{1,2,3,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0},
+			 {0,0,0,0,0,0,0,0,0}};
+		SudokuEngine engine3 = new SudokuEngine(b3,5);
+		engine3.runTabuSearch();
+		assertEquals(0, engine3.getCurrentConflictsNumber());	
 		
 	}
 	
