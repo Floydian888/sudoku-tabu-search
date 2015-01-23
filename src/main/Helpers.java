@@ -1,7 +1,9 @@
 package main;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Helpers {
 
@@ -187,5 +189,32 @@ public class Helpers {
 		}
 		
 		return movements;
+	}
+	
+	// checking how many positions are conflicting
+	// we don't check boxes assuming that boxes don't contain conflicts
+	public static int getCurrentConflictsNumber(int [][] board){
+		
+		int conflictsNumber = 0;
+		
+		for (int i = 0; i < board.length; i++) {
+			ArrayList<Integer> row = new ArrayList<Integer>();
+			for (int j = 0; j < board.length; j++) {
+				row.add(board[i][j]);
+			}
+			Set<Integer> rowUniq = new HashSet<Integer>(row);
+			conflictsNumber += row.size() - rowUniq.size();
+		}
+		
+		for (int i = 0; i < board.length; i++) {
+			ArrayList<Integer> column = new ArrayList<Integer>();
+			for (int j = 0; j < board.length; j++) {
+				column.add(board[j][i]);
+			}
+			Set<Integer> columnUniq = new HashSet<Integer>(column);
+			conflictsNumber += column.size() - columnUniq.size();
+		}
+		
+		return conflictsNumber;
 	}
 }

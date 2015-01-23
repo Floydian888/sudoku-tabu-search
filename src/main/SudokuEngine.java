@@ -92,33 +92,21 @@ public class SudokuEngine {
 	// checking how many positions are conflicting
 	// we don't check boxes assuming that boxes don't contain conflicts
 	public int getCurrentConflictsNumber(){
-		
-		int conflictsNumber = 0;
-		
-		for (int i = 0; i < size(); i++) {
-			ArrayList<Integer> row = new ArrayList<Integer>();
-			for (int j = 0; j < size(); j++) {
-				row.add(currentState.getBoard()[i][j]);
-			}
-			Set<Integer> rowUniq = new HashSet<Integer>(row);
-			conflictsNumber += row.size() - rowUniq.size();
-		}
-		
-		for (int i = 0; i < size(); i++) {
-			ArrayList<Integer> column = new ArrayList<Integer>();
-			for (int j = 0; j < size(); j++) {
-				column.add(currentState.getBoard()[j][i]);
-			}
-			Set<Integer> columnUniq = new HashSet<Integer>(column);
-			conflictsNumber += column.size() - columnUniq.size();
-		}
-		
-		return conflictsNumber;
+		return Helpers.getCurrentConflictsNumber(getCurrentState());
 	}
 	
 	public List<Tuple<Movement,Integer>> generateNeighborhood(){
-		SudokuBoard current = new SudokuBoard(currentState.getBoard());
-		return null;
+		List<Movement> movements =  generateNotBlockedMovements();
+		List<Tuple<Movement,Integer>> result = new LinkedList<Tuple<Movement,Integer>>();
+		
+		for (Movement movement : movements) {
+			SudokuBoard current = new SudokuBoard(currentState.getBoard());
+			current.swapNumbersByCoordinates(movement.from, movement.to);
+			Integer F = Helpers.getCurrentConflictsNumber(current.getBoard());
+			result.add(new Tuple<Movement, Integer>(movement, F));
+		}
+		 
+		return result;
 	}
 
 	public List<Movement> generateNotBlockedMovements(){
@@ -132,11 +120,11 @@ public class SudokuEngine {
 		
 		Iterator<Movement> iter = movements.iterator();
 		while (iter.hasNext()) {
-		  Movement theMovement = iter.next();
-		  if (blockedPositions.contains(theMovement.from) || blockedPositions.contains(theMovement.to))
-		  {
+			Movement theMovement = iter.next();
+			if (blockedPositions.contains(theMovement.from) || blockedPositions.contains(theMovement.to))
+			{
 			  iter.remove();
-		  }
+			}
 		}
 		
 		return movements;
