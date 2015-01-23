@@ -1,9 +1,17 @@
 package test;
 import static org.junit.Assert.*;
+
+import java.util.List;
+
 import main.Helpers;
+import main.Movement;
 import main.SudokuCell;
+import main.SudokuEngine;
 
 import org.junit.Test;
+
+import exception.WrongSudokuNumberException;
+import exception.WrongSudokuSizeException;
 
 public class HelpersTest {
 
@@ -43,5 +51,12 @@ public class HelpersTest {
 		Integer [] expected = {1,2,3};
 		Integer [] actual = Helpers.getNumbers(1,3);
 		assertArrayEquals(expected, actual);
+	}
+	
+	@Test
+	public void generateAllPossibleMovements() throws WrongSudokuSizeException, WrongSudokuNumberException{
+		List<Movement> mvs = Helpers.generateAllPossibleMovements(0,0);
+		System.out.println(mvs.toString());
+		System.out.println(mvs.size());
 	}
 }

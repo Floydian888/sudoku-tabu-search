@@ -2,6 +2,8 @@ package main;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -44,6 +46,10 @@ public class SudokuEngine {
 	
 	public int [][] getCurrentState(){
 		return currentState.getBoard();
+	}
+	
+	public Set<Coordinates> getBlockedPositions(){
+		return blockedPositions;
 	}
 	
 	private void fillBox(int x, int y){
@@ -108,5 +114,31 @@ public class SudokuEngine {
 		}
 		
 		return conflictsNumber;
+	}
+	
+	public List<Tuple<Movement,Integer>> generateNeighborhood(){
+		SudokuBoard current = new SudokuBoard(currentState.getBoard());
+		return null;
+	}
+
+	public List<Movement> generateNotBlockedMovements(){
+		List<Movement> movements = new LinkedList<Movement>(); 
+		for (int i = 0; i < boxSize(); i++) {
+			for (int j = 0; j < boxSize(); j++) {
+				movements.addAll(Helpers.generateAllPossibleMovements(i, j));
+			}
+		}
+		
+		
+		Iterator<Movement> iter = movements.iterator();
+		while (iter.hasNext()) {
+		  Movement theMovement = iter.next();
+		  if (blockedPositions.contains(theMovement.from) || blockedPositions.contains(theMovement.to))
+		  {
+			  iter.remove();
+		  }
+		}
+		
+		return movements;
 	}
 }

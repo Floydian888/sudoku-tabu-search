@@ -1,5 +1,7 @@
 package main;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Helpers {
 
@@ -166,5 +168,24 @@ public class Helpers {
 	
 	public static boolean isSudokuIndexGood(int index){
 		return index <= 8 && index >= 0;
+	}
+	
+	public static List<Movement> generateAllPossibleMovements(int x, int y){
+		List<Coordinates> allPossibleCoords = new LinkedList<Coordinates>();
+		
+		for (int i = x*3; i < (x+1)*3; i++) {
+			for (int j = y*3; j < (y+1)*3; j++) {
+				allPossibleCoords.add(new Coordinates(i, j));
+			}
+		}
+		
+		List<Movement> movements = new LinkedList<Movement>();
+		for (int i = 0; i < allPossibleCoords.size(); i++) {
+			for (int j = i+1; j < allPossibleCoords.size(); j++) {
+				movements.add(new Movement(allPossibleCoords.get(i),allPossibleCoords.get(j)));
+			}
+		}
+		
+		return movements;
 	}
 }
