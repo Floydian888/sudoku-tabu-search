@@ -56,7 +56,7 @@ public class HelpersTest {
 	@Test
 	public void generateAllPossibleMovements() throws WrongSudokuSizeException, WrongSudokuNumberException{
 		List<Movement> mvs = Helpers.generateAllPossibleMovements(0,0);
-		System.out.println(mvs.toString());
-		System.out.println(mvs.size());
+//		System.out.println(mvs.toString());
+//		System.out.println(mvs.size());
 	}
 }

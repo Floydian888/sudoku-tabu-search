@@ -17,17 +17,16 @@ public class Movement {
 		return result.toString();
 	}
 	
-//	@Override
-//	public boolean equals(Object other){
-//	    if (other == null) return false;
-//	    if (other == this) return true;
-//	    if (!(other instanceof Movement))return false;
-//	    Movement otherMovement = (Movement)other;
-//	    return ((from.equals(otherMovement.from) || from.equals(otherMovement.to) ) && 
-//	    		(to.equals(otherMovement.from) || to.equals(otherMovement.to) ));
-//	}
-//	@Override
-//    public int hashCode() {
-//        return from.hashCode() + to.hashCode();
-//    }
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Movement))return false;
+	    Movement otherMovement = (Movement)other;
+	    return ((from.equals(otherMovement.from) && to.equals(otherMovement.to) ));
+	}
+	@Override
+    public int hashCode() {
+        return from.hashCode() + to.hashCode();
+    }
 }

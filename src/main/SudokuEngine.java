@@ -1,6 +1,8 @@
 package main;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,12 +12,16 @@ import java.util.Set;
 
 import org.apache.commons.collections4.queue.*;
 
+import com.sun.org.apache.bcel.internal.generic.SWAP;
+import com.sun.org.apache.xml.internal.security.utils.HelperNodeList;
+
 import exception.WrongSudokuNumberException;
 import exception.WrongSudokuSizeException;
 
 public class SudokuEngine {
 
 	private SudokuBoard currentState;
+	private SudokuBoard currentBest;
 	private int size(){
 		return 9;
 	}
@@ -23,7 +29,7 @@ public class SudokuEngine {
 		return 3;
 	}
 	
-	private Queue<Tuple<Coordinates, Coordinates>> shortTermTabuList;
+	private Queue<Movement> shortTermTabuList;
 	
 	private Set<Coordinates> blockedPositions = new HashSet<Coordinates>();
 	
@@ -34,7 +40,7 @@ public class SudokuEngine {
 		if (!Helpers.hasProperNumbers(initialBoard))
 			throw new WrongSudokuNumberException("In SudokuEngine constructor");
 		
-		shortTermTabuList = new CircularFifoQueue<Tuple<Coordinates, Coordinates>>(shortTermTabuListSize);
+		shortTermTabuList = new CircularFifoQueue<Movement>(shortTermTabuListSize);
 		currentState = new SudokuBoard(initialBoard);
 		for (int i = 0; i < size(); i++) {
 			for (int j = 0; j < size(); j++) {
@@ -104,6 +110,7 @@ public class SudokuEngine {
 			current.swapNumbersByCoordinates(movement.from, movement.to);
 			Integer F = Helpers.getCurrentConflictsNumber(current.getBoard());
 			result.add(new Tuple<Movement, Integer>(movement, F));
+			current.swapNumbersByCoordinates(movement.to, movement.from);
 		}
 		 
 		return result;
@@ -129,4 +136,33 @@ public class SudokuEngine {
 		
 		return movements;
 	}
+	
+	public void runTabuSearch() {
+		fillBoard();
+		currentBest = new SudokuBoard(currentState.getBoard());
+		
+		while(getCurrentConflictsNumber() != 0) {
+			List<Tuple<Movement,Integer>> neighborhood = generateNeighborhood();
+	
+			Collections.sort(neighborhood, new Comparator<Tuple<Movement,Integer>>() {
+				public int compare(Tuple<Movement,Integer> t1, Tuple<Movement,Integer> t2) {
+					return t1.y.compareTo(t2.y);
+				}
+			});
+			for (int i = 0; i < neighborhood.size(); i++) {
+				Movement movement = neighborhood.get(i).x;
+				
+				if (!shortTermTabuList.contains(movement)) {
+					currentState.swapNumbersByCoordinates(movement.from, movement.to);
+					shortTermTabuList.add(movement);
+					break;
+				}
+			}
+
+			if (getCurrentConflictsNumber() < Helpers.getCurrentConflictsNumber(currentBest.getBoard())) {
+				currentBest = new SudokuBoard(currentState.getBoard());
+			}
+		}
+	}
+	
 }
