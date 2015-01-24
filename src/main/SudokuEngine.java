@@ -22,7 +22,13 @@ public class SudokuEngine {
 
 	private SudokuBoard currentState;
 	private SudokuBoard currentBest;
-	boolean isUsedAspirationCriterion;
+	
+	boolean useAspirationCriterion;
+	boolean useLongTermTabuList;
+	
+	private int iterationsCount;
+	private int maxIterationsCount;
+	
 	private int size(){
 		return 9;
 	}
@@ -31,10 +37,16 @@ public class SudokuEngine {
 	}
 	
 	private Queue<Movement> shortTermTabuList;
+	private Queue<Movement> longTermTabuList;
 	
 	private Set<Coordinates> blockedPositions = new HashSet<Coordinates>();
 	
-	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize) throws WrongSudokuSizeException, WrongSudokuNumberException{
+	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize,
+			boolean useAspirationCriterion, int longTermTabuListSize, int maxIterationsCount)
+			throws WrongSudokuSizeException, WrongSudokuNumberException{
+		
+		this.useAspirationCriterion = useAspirationCriterion;
+		this.maxIterationsCount = maxIterationsCount;
 		
 		if (!Helpers.hasProperSize(initialBoard))
 			throw new WrongSudokuSizeException("In SudokuEngine constructor");
@@ -42,6 +54,14 @@ public class SudokuEngine {
 			throw new WrongSudokuNumberException("In SudokuEngine constructor");
 		
 		shortTermTabuList = new CircularFifoQueue<Movement>(shortTermTabuListSize);
+		
+		if(longTermTabuListSize > 0){
+			longTermTabuList = new CircularFifoQueue<Movement>(longTermTabuListSize);
+			useLongTermTabuList = true;
+		}
+		else
+			useLongTermTabuList = false;
+		
 		currentState = new SudokuBoard(initialBoard);
 		for (int i = 0; i < size(); i++) {
 			for (int j = 0; j < size(); j++) {
@@ -57,6 +77,10 @@ public class SudokuEngine {
 	
 	public Set<Coordinates> getBlockedPositions(){
 		return blockedPositions;
+	}
+	
+	public int getIterationsCount(){
+		return iterationsCount;
 	}
 	
 	private void fillBox(int x, int y){
@@ -98,7 +122,7 @@ public class SudokuEngine {
 	
 	// checking how many positions are conflicting
 	// we don't check boxes assuming that boxes don't contain conflicts
-	public int getCurrentConflictsNumber(){
+	public int getCurrentCostFunctionValue(){
 		return Helpers.getCurrentConflictsNumber(getCurrentState());
 	}
 	
@@ -139,10 +163,18 @@ public class SudokuEngine {
 	}
 	
 	public void runTabuSearch() {
+		
+		iterationsCount = 0;
+		
 		fillBoard();
 		currentBest = new SudokuBoard(currentState.getBoard());
 		
-		while(getCurrentConflictsNumber() != 0) {
+		while(getCurrentCostFunctionValue() != 0 && iterationsCount < maxIterationsCount) {
+			
+//			System.out.print(getCurrentCostFunctionValue() + ",");
+			
+			iterationsCount++;
+			
 			List<Tuple<Movement,Integer>> neighborhood = generateNeighborhood();
 	
 			Collections.sort(neighborhood, new Comparator<Tuple<Movement,Integer>>() {
@@ -150,19 +182,31 @@ public class SudokuEngine {
 					return t1.y.compareTo(t2.y);
 				}
 			});
+			
+			int penalty = 0;
 			for (int i = 0; i < neighborhood.size(); i++) {
 				Movement movement = neighborhood.get(i).x;
 				
+				if(useLongTermTabuList){
+					penalty = Collections.frequency(longTermTabuList, movement);
+//					if(penalty > 0)
+//						System.out.print("<" + penalty + ">");
+				}
+				
 				if (!shortTermTabuList.contains(movement) ||
-						(isUsedAspirationCriterion &&
-								neighborhood.get(i).y < Helpers.getCurrentConflictsNumber(currentBest.getBoard()))) {
+						(useAspirationCriterion &&
+								neighborhood.get(i).y + penalty < Helpers.getCurrentConflictsNumber(currentBest.getBoard()))) {
+					
 					currentState.swapNumbersByCoordinates(movement.from, movement.to);
 					shortTermTabuList.add(movement);
+					if(useLongTermTabuList)
+						longTermTabuList.add(movement);
+					
 					break;
-				}				
+				}
 			}
 
-			if (getCurrentConflictsNumber() < Helpers.getCurrentConflictsNumber(currentBest.getBoard())) {
+			if (getCurrentCostFunctionValue() < Helpers.getCurrentConflictsNumber(currentBest.getBoard())) {
 				currentBest = new SudokuBoard(currentState.getBoard());
 			}
 		}

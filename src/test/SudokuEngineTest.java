@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import main.BoardGenerator;
 import main.Coordinates;
 import main.Helpers;
 import main.Movement;
@@ -31,7 +32,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e1 = new SudokuEngine(wrongSizeBoard,1);
+		SudokuEngine e1 = new SudokuEngine(wrongSizeBoard,1,false,0,1000);
 	}
 	
 	@Test(expected=WrongSudokuNumberException.class)
@@ -46,7 +47,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e1 = new SudokuEngine(wrongNumbersBoard,1);
+		SudokuEngine e1 = new SudokuEngine(wrongNumbersBoard,1,false,0,1000);
 	}
 	
 	@Test
@@ -61,8 +62,8 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e1 = new SudokuEngine(b1,1);
-		assertEquals(0, e1.getCurrentConflictsNumber());
+		SudokuEngine e1 = new SudokuEngine(b1,1,false,0,1000);
+		assertEquals(0, e1.getCurrentCostFunctionValue());
 		
 		int [][] b2 =
 			{{3,2,1,4,5,6,7,8,9},
@@ -74,8 +75,8 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine e2 = new SudokuEngine(b2,1);
-		assertEquals(2, e2.getCurrentConflictsNumber());
+		SudokuEngine e2 = new SudokuEngine(b2,1,false,0,1000);
+		assertEquals(2, e2.getCurrentCostFunctionValue());
 		
 		int [][] b3 =
 			{{1,1,1,1,1,1,1,1,1},
@@ -87,8 +88,8 @@ public class SudokuEngineTest {
 			 {1,1,1,1,1,1,1,1,1},
 			 {1,1,1,1,1,1,1,1,1},
 			 {1,1,1,1,1,1,1,1,1}};
-		SudokuEngine e3 = new SudokuEngine(b3,1);
-		assertEquals(2*8*9, e3.getCurrentConflictsNumber());
+		SudokuEngine e3 = new SudokuEngine(b3,1,false,0,1000);
+		assertEquals(2*8*9, e3.getCurrentCostFunctionValue());
 	}
 	
 	@Test
@@ -103,7 +104,7 @@ public class SudokuEngineTest {
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,2}};
-		SudokuEngine engine = new SudokuEngine(inputBoard,1);
+		SudokuEngine engine = new SudokuEngine(inputBoard,1,false,0,1000);
 		
 		engine.fillBoard();
 		int [][] filledBoard = engine.getCurrentState();
@@ -127,7 +128,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine engine = new SudokuEngine(b1,1);
+		SudokuEngine engine = new SudokuEngine(b1,1,false,0,1000);
 		assertEquals(0, engine.generateNotBlockedMovements().size());
 		
 		int [][] b2 =
@@ -140,7 +141,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine engine2 = new SudokuEngine(b2,1);
+		SudokuEngine engine2 = new SudokuEngine(b2,1,false,0,1000);
 		assertEquals(0, engine2.generateNotBlockedMovements().size());
 		
 		int [][] b3 =
@@ -153,7 +154,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine engine3 = new SudokuEngine(b3,1);
+		SudokuEngine engine3 = new SudokuEngine(b3,1,false,0,1000);
 		assertEquals(1, engine3.generateNotBlockedMovements().size());
 		
 		int [][] b4 =
@@ -166,7 +167,7 @@ public class SudokuEngineTest {
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0}};
-		SudokuEngine engine4 = new SudokuEngine(b4,1);
+		SudokuEngine engine4 = new SudokuEngine(b4,1,false,0,1000);
 		assertEquals(36*9, engine4.generateNotBlockedMovements().size());
 		
 	}
@@ -183,7 +184,7 @@ public class SudokuEngineTest {
 			 {3,1,2,6,4,5,9,7,8},
 			 {7,9,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine engine = new SudokuEngine(b1,1);
+		SudokuEngine engine = new SudokuEngine(b1,1,false,0,1000);
 		engine.fillBoard();
 		List<Tuple<Movement,Integer>> result = engine.generateNeighborhood();
 		assertEquals(1, result.size());		
@@ -192,7 +193,7 @@ public class SudokuEngineTest {
 		assertTrue(result.get(0).y == 2);
 	}
 	@Test
-	public void runTabuSearch() throws WrongSudokuSizeException, WrongSudokuNumberException {
+	public void tabuNoAspCriterionNoLongterm() throws WrongSudokuSizeException, WrongSudokuNumberException {
 		int [][] b1 =
 			{{1,0,3,4,5,6,7,8,9},
 			 {9,0,7,3,2,1,6,5,4},
@@ -203,9 +204,9 @@ public class SudokuEngineTest {
 			 {0,0,2,6,4,5,9,7,8},
 			 {0,0,8,1,3,2,4,6,5},
 			 {4,6,5,7,9,8,1,3,2}};
-		SudokuEngine engine = new SudokuEngine(b1,1);
+		SudokuEngine engine = new SudokuEngine(b1,1,false,0,1000);
 		engine.runTabuSearch();
-		assertEquals(0, engine.getCurrentConflictsNumber());
+		assertEquals(0, engine.getCurrentCostFunctionValue());
 		
 		int [][] b2 =
 			{{1,0,3,4,0,0,7,0,0},
@@ -217,9 +218,9 @@ public class SudokuEngineTest {
 			 {0,0,2,6,4,0,0,0,8},
 			 {0,0,8,0,3,0,4,0,5},
 			 {4,0,5,7,9,8,1,0,2}};
-		SudokuEngine engine2 = new SudokuEngine(b2,5);
+		SudokuEngine engine2 = new SudokuEngine(b2,5,false,0,1000);
 		engine2.runTabuSearch();
-		assertEquals(0, engine2.getCurrentConflictsNumber());	
+		assertEquals(0, engine2.getCurrentCostFunctionValue());	
 		
 		int [][] b3 =
 			{{1,2,3,0,0,0,0,0,0},
@@ -231,12 +232,56 @@ public class SudokuEngineTest {
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0},
 			 {0,0,0,0,0,0,0,0,0}};
-		SudokuEngine engine3 = new SudokuEngine(b3,5);
+		SudokuEngine engine3 = new SudokuEngine(b3,5,false,0,1000);
 		engine3.runTabuSearch();
-		assertEquals(0, engine3.getCurrentConflictsNumber());	
-		
+		assertEquals(0, engine3.getCurrentCostFunctionValue());
 	}
 	
+	int [][] getSudokuBoard(){
+		
+		BoardGenerator bg = new BoardGenerator(15122);
+		bg.generateCorrectBoard(9);
+		bg.removeNumbers(30);
+		
+		return bg.getCurrentBoard();
+	}
+	
+	@Test
+	public void tabuAspCriterionLongterm() throws WrongSudokuSizeException, WrongSudokuNumberException {
+		
+		int shortTermTabuListLength = 10;
+		int longTermTabuListLength = 50;
+		int maxIterationsCount = 1000;
+		
+		System.out.println("shortTermTabuListLength: " + shortTermTabuListLength);
+		System.out.println("longTermTabuListLength: " + longTermTabuListLength);
+		System.out.println("maxIterationsCount: " + maxIterationsCount);
+		System.out.println();
+		
+		SudokuEngine e1 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,false,0,maxIterationsCount);
+		e1.runTabuSearch();
+		System.out.println("No asp cr, no longterm list, it count: " + e1.getIterationsCount());
+		System.out.println("Conflicts number: " + e1.getCurrentCostFunctionValue());
+		System.out.println();
+		
+		SudokuEngine e2 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,true,0,maxIterationsCount);
+		e2.runTabuSearch();
+		System.out.println("Asp cr, no longterm list, it count: " + e2.getIterationsCount());
+		System.out.println("Conflicts number: " + e2.getCurrentCostFunctionValue());
+		System.out.println();
+		
+		SudokuEngine e3 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,true,longTermTabuListLength,maxIterationsCount);
+		e3.runTabuSearch();
+		System.out.println("Asp cr, longterm list, it count: " + e3.getIterationsCount());
+		System.out.println("Conflicts number: " + e3.getCurrentCostFunctionValue());
+		System.out.println();
+		
+		SudokuEngine e4 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,false,longTermTabuListLength,maxIterationsCount);
+		e4.runTabuSearch();
+		System.out.println("No asp cr, longterm list, it count: " + e4.getIterationsCount());
+		System.out.println("Conflicts number: " + e4.getCurrentCostFunctionValue());
+		System.out.println();
+	}
 }
 
 

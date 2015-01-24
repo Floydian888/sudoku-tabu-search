@@ -1,11 +1,22 @@
 package main;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class BoardGenerator {
 
 	private SudokuCell [][] board;
 	private int size;
+	Random randGenerator = new Random();
+	private int seed;
+	
+	public BoardGenerator(){
+	}
+	
+	public BoardGenerator(int seed){
+		this.seed = seed;
+		randGenerator.setSeed(seed);
+	}
 
 	public boolean isCorrect(final int size){
 		return Helpers.isCorrect(board);
@@ -20,7 +31,7 @@ public class BoardGenerator {
     }
 
 	private int getRandomIndex() {
-        return (int) (Math.random() * 10) % size + 1;
+        return (int) randGenerator.nextInt(9) + 1;
     }
 
 	private Coordinates nextCell(final int row, final int col) {
@@ -69,7 +80,7 @@ public class BoardGenerator {
 			cellsToRemove.add(i);
 
 		for (int i = 0; i < leftNumbersNmb; i++) {
-			Collections.shuffle(cellsToRemove);
+			Collections.shuffle(cellsToRemove, randGenerator);
 			cellsToRemove.remove(0);
 		}
 
