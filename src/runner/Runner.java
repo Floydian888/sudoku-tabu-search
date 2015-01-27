@@ -8,6 +8,7 @@ import main.SudokuEngine;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -20,7 +21,9 @@ public class Runner {
 	
 	public static void main(String[] args) throws IOException {
 		Options options = new Options();
-
+		
+		options.addOption("help", false, "print this message");
+		
 		options.addOption("short", true, "short term tabu list size");
 		options.addOption("long", true, "long term tabu list size, if not given there is no long term list");
 		options.addOption("maxIt", true, "max iterations count");
@@ -51,6 +54,12 @@ public class Runner {
 	    int numbersToRemoveFromInitialBoardCount = 0;
 	    
 	    boolean printBoardDuringRun = false;
+	    
+	    if(line.hasOption("help")){
+	    	HelpFormatter formatter = new HelpFormatter();
+	    	formatter.printHelp("tabu search sudoku solver", options);
+	    	return;
+	    }
 	    
 	    if(!line.hasOption("short") || !line.hasOption("maxIt") || !line.hasOption("remove")) {
 	    	System.out.println("One of obligatory arguments not given!");
