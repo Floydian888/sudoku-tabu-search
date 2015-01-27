@@ -31,7 +31,7 @@ public class Runner {
 		
 		options.addOption("seed", true,
 				"sets seed of generating Sudoku board, if not present different board is generated every time");
-		options.addOption("remove", true, "how many numbers are removed from initial board");
+		options.addOption("leave", true, "how many numbers are left in initial board");
 		
 		options.addOption("print", false, "sets printing of Sudoku board during algorithm run");
 		
@@ -81,7 +81,7 @@ public class Runner {
 	    	else
 	    		withSeed = false;
 	    	
-	    	numbersToRemoveFromInitialBoardCount = shortTermTabuListSize = extractNumericalOption(line, "remove");
+	    	numbersToRemoveFromInitialBoardCount = shortTermTabuListSize = extractNumericalOption(line, "leave");
 	    	
 	    	printBoardDuringRun = line.hasOption("print");
 	    }

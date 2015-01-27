@@ -152,7 +152,6 @@ public class SudokuEngine {
 			}
 		}
 		
-		
 		Iterator<Movement> iter = movements.iterator();
 		while (iter.hasNext()) {
 			Movement theMovement = iter.next();

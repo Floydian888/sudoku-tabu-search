@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import main.BoardGenerator;
@@ -237,13 +238,47 @@ public class SudokuEngineTest {
 		assertEquals(0, engine3.getCurrentCostFunctionValue());
 	}
 	
-	int [][] getSudokuBoard(){
+	private int [][] getSudokuBoard(int seed, int leftNmbsCount){
 		
-		BoardGenerator bg = new BoardGenerator(151332);
+		BoardGenerator bg = new BoardGenerator(seed);
 		bg.generateCorrectBoard(9);
-		bg.removeNumbers(70);
+		
+//		Helpers.printBoard(bg.getCurrentBoard());
+//		System.out.print("---");
+		
+		bg.removeNumbers(leftNmbsCount);
+		
+//		Helpers.printBoard(bg.getCurrentBoard());
 		
 		return bg.getCurrentBoard();
+	}
+
+	private void testMultipleTimes(int [] seeds, boolean useAspCr, int longTermTabuListLength, int maxItCount, int leftNmbsCount)
+			throws WrongSudokuSizeException, WrongSudokuNumberException{
+		
+		for (int j = 5; j < 300; j+=10) {
+			int sum = 0;
+			for (int i = 0; i < seeds.length; i++) {
+				SudokuEngine e1 =
+						new SudokuEngine(getSudokuBoard(seeds[i],leftNmbsCount),j,useAspCr,longTermTabuListLength,maxItCount,false);
+				e1.runTabuSearch();
+//				System.out.print(e1.getIterationsCount() + ";");
+				
+				sum += e1.getIterationsCount();	
+			}
+//			System.out.println();
+			System.out.print(sum/seeds.length + ",");
+		}
+		System.out.println();
+	}
+	
+	private void testForParams(boolean useAspCr, int longTermTabuListLength, int [] seeds, int maxIterationsCount)
+			throws WrongSudokuSizeException, WrongSudokuNumberException{
+		System.out.println("Asp cr: " + useAspCr);
+		System.out.println("longTermTabuListLength: " + longTermTabuListLength);
+		for (int i = 80; i >= 0; i-=10) {
+			testMultipleTimes(seeds, useAspCr, longTermTabuListLength, maxIterationsCount, i);
+		}
 	}
 	
 	@Test
@@ -258,29 +293,50 @@ public class SudokuEngineTest {
 		System.out.println("maxIterationsCount: " + maxIterationsCount);
 		System.out.println();
 		
-		SudokuEngine e1 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,false,0,maxIterationsCount,false);
+		SudokuEngine e1 = new SudokuEngine(getSudokuBoard(10,10),shortTermTabuListLength,false,0,maxIterationsCount,false);
 		e1.runTabuSearch();
 		System.out.println("No asp cr, no longterm list, it count: " + e1.getIterationsCount());
 		System.out.println("Conflicts number: " + e1.getCurrentCostFunctionValue());
 		System.out.println();
 		
-		SudokuEngine e2 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,true,0,maxIterationsCount,false);
+		SudokuEngine e2 = new SudokuEngine(getSudokuBoard(10,10),shortTermTabuListLength,true,0,maxIterationsCount,false);
 		e2.runTabuSearch();
 		System.out.println("Asp cr, no longterm list, it count: " + e2.getIterationsCount());
 		System.out.println("Conflicts number: " + e2.getCurrentCostFunctionValue());
 		System.out.println();
 		
-		SudokuEngine e3 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,true,longTermTabuListLength,maxIterationsCount,false);
+		SudokuEngine e3 = new SudokuEngine(getSudokuBoard(10,10),shortTermTabuListLength,true,longTermTabuListLength,maxIterationsCount,false);
 		e3.runTabuSearch();
 		System.out.println("Asp cr, longterm list, it count: " + e3.getIterationsCount());
 		System.out.println("Conflicts number: " + e3.getCurrentCostFunctionValue());
 		System.out.println();
 		
-		SudokuEngine e4 = new SudokuEngine(getSudokuBoard(),shortTermTabuListLength,false,longTermTabuListLength,maxIterationsCount,false);
+		SudokuEngine e4 = new SudokuEngine(getSudokuBoard(10,10),shortTermTabuListLength,false,longTermTabuListLength,maxIterationsCount,false);
 		e4.runTabuSearch();
 		System.out.println("No asp cr, longterm list, it count: " + e4.getIterationsCount());
 		System.out.println("Conflicts number: " + e4.getCurrentCostFunctionValue());
 		System.out.println();
+	}
+	
+	@Test
+	public void testsForGraphs() throws WrongSudokuSizeException, WrongSudokuNumberException {
+
+		int maxIterationsCount = 2000;
+		
+		Random randGenerator = new Random();
+		randGenerator.setSeed(10);
+		int seedsCount = 20;
+		int [] seeds = new int [seedsCount];
+		for (int i = 0; i < seedsCount; i++)
+			seeds[i] = randGenerator.nextInt();
+
+		boolean useAspCr = false;
+		int longTermTabuListLength = 0;
+		testForParams(useAspCr, longTermTabuListLength, seeds, maxIterationsCount);
+		
+		useAspCr = true;
+		longTermTabuListLength = 0;
+		testForParams(useAspCr, longTermTabuListLength, seeds, maxIterationsCount);
 	}
 }
 
