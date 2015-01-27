@@ -29,6 +29,8 @@ public class SudokuEngine {
 	private int iterationsCount;
 	private int maxIterationsCount;
 	
+	private boolean printBoardDuringAlgorithmRun;
+	
 	private int size(){
 		return 9;
 	}
@@ -41,12 +43,13 @@ public class SudokuEngine {
 	
 	private Set<Coordinates> blockedPositions = new HashSet<Coordinates>();
 	
-	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize,
-			boolean useAspirationCriterion, int longTermTabuListSize, int maxIterationsCount)
+	public SudokuEngine(int [][] initialBoard, int shortTermTabuListSize, boolean useAspirationCriterion, 
+			int longTermTabuListSize, int maxIterationsCount, boolean printBoardDuringAlgorithmRun)
 			throws WrongSudokuSizeException, WrongSudokuNumberException{
 		
 		this.useAspirationCriterion = useAspirationCriterion;
 		this.maxIterationsCount = maxIterationsCount;
+		this.printBoardDuringAlgorithmRun = printBoardDuringAlgorithmRun;
 		
 		if (!Helpers.hasProperSize(initialBoard))
 			throw new WrongSudokuSizeException("In SudokuEngine constructor");
@@ -171,6 +174,14 @@ public class SudokuEngine {
 		
 		while(getCurrentCostFunctionValue() != 0 && iterationsCount < maxIterationsCount) {
 			
+			if(printBoardDuringAlgorithmRun)
+			{
+				System.out.println("------------------");
+				System.out.println("Iteration number: " + iterationsCount);
+				Helpers.printBoard(getCurrentState());
+				System.out.println("Cost funtion: " + getCurrentCostFunctionValue());
+			}
+			
 //			System.out.print(getCurrentCostFunctionValue() + ",");
 			
 			iterationsCount++;
@@ -201,6 +212,9 @@ public class SudokuEngine {
 					shortTermTabuList.add(movement);
 					if(useLongTermTabuList)
 						longTermTabuList.add(movement);
+					
+					if(printBoardDuringAlgorithmRun)
+						System.out.println("Movement: " + movement.toString());
 					
 					break;
 				}

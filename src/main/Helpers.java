@@ -143,7 +143,10 @@ public class Helpers {
 	public static void printBoard(int [][] board) {
 		System.out.print("{");
 		for (int y = 0; y < board.length; y++) {
-			System.out.print("{");
+			if(y == 0)
+				System.out.print("{");
+			else
+				System.out.print(" {");
 			for (int x = 0; x < board.length; x++){
 				System.out.print(board[y][x]);
 				if(x!=board.length-1)
@@ -151,9 +154,12 @@ public class Helpers {
 			}
 				
 			System.out.print("}");
-			System.out.print("\n");
+			
+			if(y < board.length-1)
+				System.out.println();
 		}
 		System.out.print("}");
+		System.out.println();
 	}
 	
 	public static boolean hasProperSize(int [][] sudokuBoard){
